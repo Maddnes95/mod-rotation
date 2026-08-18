@@ -48,6 +48,11 @@ static bool ReadyToCast(Player* p, SpellInfo const* info)
     if (p->GetGlobalCooldownMgr().HasGlobalCooldown(info))
         return false;
 
+    // Posture/forme requise non satisfaite (ex. Pourfendre en Posture
+    // berserker) : on ignore silencieusement au lieu de spammer l'erreur.
+    if (info->CheckShapeshift(p->GetShapeshiftForm()) != SPELL_CAST_OK)
+        return false;
+
     return CanPayCost(p, info);
 }
 
