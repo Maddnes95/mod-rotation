@@ -39,10 +39,22 @@ Rotation.AutoLearn = 1
 #
 #    Rotation.Announce
 #        Description: Shows a message to players on login.
-#        Default: 1
+#        Default: 0 (disabled)
 #
 
-Rotation.Announce = 1
+Rotation.Announce = 0
+
+#
+#    Rotation.Announce.Message
+#        Description: The login message sent when Rotation.Announce is
+#                     enabled. Supports WoW color codes (|cffXXXXXX...|r).
+#        Default: "One-button |cff4CFF00Rotation|r module active: place the
+#                     Rotation spell from your spellbook on your action bar."
+#        French example:
+#            Rotation.Announce.Message = "Module |cff4CFF00Rotation|r actif : placez le sort Rotation de votre grimoire sur votre barre d'action."
+#
+
+Rotation.Announce.Message = "One-button |cff4CFF00Rotation|r module active: place the Rotation spell from your spellbook on your action bar."
 
 #
 #    Rotation.AoE.Threshold

@@ -208,7 +208,9 @@ public:
         config.Enabled             = sConfigMgr->GetOption<bool>("Rotation.Enable", true);
         config.SpellId             = sConfigMgr->GetOption<uint32>("Rotation.SpellId", 47322);
         config.AutoLearn           = sConfigMgr->GetOption<bool>("Rotation.AutoLearn", true);
-        config.Announce            = sConfigMgr->GetOption<bool>("Rotation.Announce", true);
+        config.Announce            = sConfigMgr->GetOption<bool>("Rotation.Announce", false);
+        config.AnnounceMessage     = sConfigMgr->GetOption<std::string>("Rotation.Announce.Message",
+            "One-button |cff4CFF00Rotation|r module active: place the Rotation spell from your spellbook on your action bar.");
         config.AoeThreshold        = sConfigMgr->GetOption<uint32>("Rotation.AoE.Threshold", 2);
         config.RageDumpThreshold   = sConfigMgr->GetOption<uint32>("Rotation.RageDump.Threshold", 50);
         config.EnergyDumpThreshold = sConfigMgr->GetOption<uint32>("Rotation.EnergyDump.Threshold", 60);
@@ -231,8 +233,8 @@ public:
         if (config.AutoLearn && !player->HasSpell(config.SpellId))
             player->learnSpell(config.SpellId);
 
-        if (config.Announce)
-            ChatHandler(player->GetSession()).SendSysMessage("Module |cff4CFF00Rotation|r actif : placez le sort « Rotation » de votre grimoire sur votre barre d'action.");
+        if (config.Announce && !config.AnnounceMessage.empty())
+            ChatHandler(player->GetSession()).SendSysMessage(config.AnnounceMessage.c_str());
     }
 
     void OnPlayerSpellCast(Player* player, Spell* spell, bool /*skipCheck*/) override
