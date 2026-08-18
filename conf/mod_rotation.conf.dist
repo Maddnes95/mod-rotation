@@ -1,75 +1,73 @@
 #
 # mod-rotation — configuration
-# Copié automatiquement vers configs/modules/mod_rotation.conf lors du build.
-# Rechargeable en jeu avec la commande GM : .reload config
+# Automatically copied to configs/modules/mod_rotation.conf at build time.
+# Reloadable in-game with the GM command: .reload config
 #
 
 [worldserver]
 
 #
 #    Rotation.Enable
-#        Description : Active ou désactive le module.
-#        Valeur par défaut : 1
+#        Description: Enables or disables the module.
+#        Default: 1
 #
 
 Rotation.Enable = 1
 
 #
 #    Rotation.SpellId
-#        Description : ID du sort déclencheur (le sort « Rotation » sur la barre
-#                      d'action). Doit exister dans le Spell.dbc du client,
-#                      être instantané, sans coût et sans effet gênant.
-#        Valeur par défaut : 47322 (« Dragonblight Test Spell 02 » : instantané,
-#                      coût nul, sans recharge, GCD 0, effet Dummy inoffensif)
-#        Alternative testée : 40019 (« Birmingham Tools Test » — joue un son
-#                      « ZombieAggro » à chaque appui)
+#        Description: ID of the trigger spell (the "Rotation" spell on the
+#                     action bar). Must exist in the client's Spell.dbc, be
+#                     instant, cost nothing and have no disruptive effect.
+#        Default: 47322 ("Dragonblight Test Spell 02": instant, no cost,
+#                     no cooldown, no GCD, harmless Dummy effect)
+#        Tested alternative: 40019 ("Birmingham Tools Test" — plays a
+#                     "ZombieAggro" sound on every press)
 #
 
 Rotation.SpellId = 47322
 
 #
 #    Rotation.AutoLearn
-#        Description : Apprend automatiquement le sort déclencheur à tous les
-#                      joueurs à la connexion (toutes classes).
-#        Valeur par défaut : 1
+#        Description: Automatically teaches the trigger spell to every player
+#                     on login (all classes).
+#        Default: 1
 #
 
 Rotation.AutoLearn = 1
 
 #
 #    Rotation.Announce
-#        Description : Affiche un message aux joueurs à la connexion.
-#        Valeur par défaut : 1
+#        Description: Shows a message to players on login.
+#        Default: 1
 #
 
 Rotation.Announce = 1
 
 #
 #    Rotation.AoE.Threshold
-#        Description : Nombre d'ennemis au corps à corps à partir duquel les
-#                      aptitudes de zone (Tourbillon, Enchaînement, Consécration,
-#                      Volée, Blizzard, Mort et décomposition…) prennent la
-#                      priorité.
-#        Valeur par défaut : 2
+#        Description: Number of enemies in melee range from which area
+#                     abilities (Whirlwind, Cleave, Consecration, Volley,
+#                     Blizzard, Death and Decay…) take priority.
+#        Default: 2
 #
 
 Rotation.AoE.Threshold = 2
 
 #
 #    Rotation.RageDump.Threshold
-#        Description : Rage minimale (0-100) avant de mettre en file les
-#                      attaques « à la prochaine frappe » (Frappe héroïque,
-#                      Enchaînement, Mutilation), afin de ne pas affamer le
-#                      reste de la rotation.
-#        Valeur par défaut : 50
+#        Description: Minimum rage (0-100) before queueing "on next swing"
+#                     attacks (Heroic Strike, Cleave, Maul), so the rest of
+#                     the rotation is not starved.
+#        Default: 50
 #
 
 Rotation.RageDump.Threshold = 50
 
 #
 #    Rotation.EnergyDump.Threshold
-#        Description : Réservé aux évolutions futures (seuil d'énergie).
-#        Valeur par défaut : 60
+#        Description: Reserved for future use (energy threshold).
+#        Default: 60
 #
 
 Rotation.EnergyDump.Threshold = 60
@@ -78,15 +76,15 @@ Rotation.EnergyDump.Threshold = 60
 #    Rotation.Heal.InjuredPct
 #    Rotation.Heal.LowPct
 #    Rotation.Heal.UrgentPct
-#        Description : Seuils de vie (en %) utilisés par les spécialisations de
-#                      soin sur la cible amicale (ou soi-même) :
-#                        - InjuredPct : en-dessous, soins d'entretien (HoT,
-#                          boucliers, petits soins)
-#                        - LowPct     : en-dessous, soins soutenus
-#                        - UrgentPct  : en-dessous, soins d'urgence
-#                      Au-dessus d'InjuredPct, les soigneurs contribuent en
-#                      dégâts légers si un ennemi est ciblé.
-#        Valeurs par défaut : 85 / 60 / 35
+#        Description: Health thresholds (in %) used by healing
+#                     specializations on the friendly target (or self):
+#                       - InjuredPct: below this, maintenance healing (HoTs,
+#                         shields, small heals)
+#                       - LowPct    : below this, sustained healing
+#                       - UrgentPct : below this, emergency healing
+#                     Above InjuredPct, healers contribute light damage if an
+#                     enemy is targeted.
+#        Defaults: 85 / 60 / 35
 #
 
 Rotation.Heal.InjuredPct = 85
