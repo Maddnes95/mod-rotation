@@ -1,115 +1,146 @@
 # mod-rotation
 
-Module AzerothCore (compatible fork **liyunfan1223/azerothcore-wotlk**, branche
-Playerbot) : une rotation « un bouton » déclenchée par un sort placé sur la
-barre d'action. **1 appui = 1 action** — chaque pression lance l'aptitude la
-plus prioritaire actuellement disponible.
+*[Version française : README_FR.md](README_FR.md)*
 
-**Toutes les classes et les 30 spécialisations** sont couvertes. La
-spécialisation est détectée automatiquement (arbre de talents dominant), les
-rotations suivent les guides Wowhead WotLK Classic, et le module résout le
-**rang maximum connu** de chaque sort : il fonctionne à tous les niveaux.
+AzerothCore module (compatible with the **liyunfan1223/azerothcore-wotlk**
+fork, Playerbot branch): a one-button rotation triggered by a spell placed on
+the action bar. **1 press = 1 action** — each press casts the highest-priority
+ability currently available.
 
-## Le sort déclencheur
+**All 10 classes and 30 specializations** are covered. The specialization is
+detected automatically (dominant talent tree), rotations follow the Wowhead
+WotLK Classic guides, and the module resolves the **highest known rank** of
+every spell: it works at every level, not just 80.
 
-Par défaut : **47322 « Dragonblight Test Spell 02 »**, un sort de test Blizzard
-inutilisé, présent dans le `Spell.dbc` du client 3.3.5a : instantané, coût nul,
-aucune recharge, GCD 0, un seul effet *Dummy* inoffensif. Tous les joueurs
-l'apprennent à la connexion (`Rotation.AutoLearn = 1`).
+## Testing status
 
-Le renommage en « Rotation » (et l'icône) se fait côté client par un mini-patch
-MPQ : éditer le nom du sort 47322 dans `DBFilesClient\Spell.dbc` (WDBX Editor,
-Spell Editor de stoneharry…) et livrer le fichier dans un `patch-4.MPQ` /
-`patch-frFR-4.MPQ`. Purement cosmétique : le module fonctionne sans.
+⚠️ **Only a few classes have been tested at high level** so far (notably Fury
+Warrior). All other specializations are implemented from the Wowhead guides
+but have not been battle-tested yet — bug reports and fixes are very welcome
+(see Contributing below).
 
-## Rotations implémentées
+## Contributing
 
-Conditions générales : les coûts (mana/rage/énergie/runes), recharges, GCD et
-portées sont vérifiés avant chaque cast — si une aptitude n'est pas disponible,
-la suivante de la liste est essayée. « AoE » = au moins `Rotation.AoE.Threshold`
-ennemis au corps à corps (défaut : 2). Les soigneurs soignent la **cible
-amicale sélectionnée** (ou eux-mêmes) selon les seuils `Rotation.Heal.*`, et
-font des dégâts légers si personne n'est blessé.
+**Please submit any modification of this module as a pull request to this
+repository**, so that fixes and improvements benefit everyone instead of
+diverging across private forks.
 
-### Guerrier
-- **Armes** : Pourfendre → Exécution (proc Mort soudaine ou <20 %) → Fulgurance (proc Goût du sang) → [AoE : Frappes circulaires, Tempête de lames] → Frappe mortelle → Heurtoir → Frappe héroïque/Enchaînement (rage > seuil)
-- **Fureur** : Soif de sang → Tourbillon (AoE) → Heurtoir (proc Déferlement sanguin) → Pourfendre → Exécution (<20 %) → Frappe héroïque/Enchaînement
-- **Protection** : Blocage de bouclier → Heurt de bouclier → Vengeance → Onde de choc → [AoE : Coup de tonnerre] → Dévaster → Frappe héroïque/Enchaînement
+Note: this is the project's contribution policy, not a license term — the
+AGPL-3.0 license legally permits forks and modified copies, provided the
+modified source is made available under the same license. If you run a
+modified version, you are still required by AGPL-3.0 to publish your changes;
+the friendly way to do that is a PR here.
+
+## The trigger spell
+
+Default: **47322 "Dragonblight Test Spell 02"**, an unused Blizzard test spell
+present in the 3.3.5a client `Spell.dbc`: instant, no cost, no cooldown, no
+GCD, a single harmless *Dummy* effect. Every player learns it on login
+(`Rotation.AutoLearn = 1`).
+
+Renaming it to "Rotation" (and changing its icon) is done client-side with a
+small MPQ patch: edit the name of spell 47322 in `DBFilesClient\Spell.dbc`
+(WDBX Editor, stoneharry's Spell Editor…) and ship the file in a
+`patch-4.MPQ` / `patch-enUS-4.MPQ`. Purely cosmetic: the module works without
+it. The spell ID can be changed in the config (`Rotation.SpellId`) without
+recompiling.
+
+## Implemented rotations
+
+General rules: power costs (mana/rage/energy/runes), cooldowns, GCD and range
+are checked before every cast — if an ability is unavailable, the next one in
+the list is tried. "AoE" = at least `Rotation.AoE.Threshold` enemies in melee
+range (default: 2). Healers heal the **selected friendly target** (or
+themselves) according to the `Rotation.Heal.*` thresholds, and deal light
+damage when nobody is injured.
+
+### Warrior
+- **Arms**: Rend → Execute (Sudden Death proc or <20%) → Overpower (Taste for Blood proc) → [AoE: Sweeping Strikes, Bladestorm] → Mortal Strike → Slam → Heroic Strike/Cleave (rage above threshold)
+- **Fury**: Bloodthirst → Whirlwind (AoE) → Slam (Bloodsurge proc) → Rend → Execute (<20%) → Heroic Strike/Cleave
+- **Protection**: Shield Block → Shield Slam → Revenge → Shockwave → [AoE: Thunder Clap] → Devastate → Heroic Strike/Cleave
 
 ### Paladin
-- **Vindicte** : sceau entretenu (Vengeance/Corruption selon faction) ; Marteau de courroux (<20 %) → Frappe du croisé → Jugement → Tempête divine → Consécration → Exorcisme → Courroux sacré (morts-vivants/démons). AoE : Consécration et Tempête divine en tête.
-- **Protection** : rotation 969 — Bouclier sacré entretenu → Marteau du vertueux → Bouclier du vertueux → Consécration → Jugement
-- **Sacré** : Guide de lumière + Bouclier sacré entretenus → Horion sacré / Eclair lumineux / Lumière sacrée selon la gravité
+- **Retribution**: seal maintained (Vengeance/Corruption by faction); Hammer of Wrath (<20%) → Crusader Strike → Judgement → Divine Storm → Consecration → Exorcism → Holy Wrath (undead/demons). AoE: Consecration and Divine Storm first.
+- **Protection**: 969 rotation — Holy Shield maintained → Hammer of the Righteous → Shield of Righteousness → Consecration → Judgement
+- **Holy**: Beacon of Light + Sacred Shield maintained → Holy Shock / Flash of Light / Holy Light by severity
 
-### Chevalier de la mort
-Maladies entretenues (Fièvre de givre + Peste de sang) pour les trois arbres, [AoE : Mort et décomposition, Pestilence, Bouillonnement de sang], puis :
-- **Sang** : Frappe de mort → Frappe du cœur/de sang → Frappe runique / Voile mortel
-- **Givre** : Rafale hurlante (proc Brouillard givrant) → Oblitérer → Frappe de sang → Frappe de givre
-- **Impie** : Frappe du fléau → Frappe de sang → Voile mortel
+### Death Knight
+Diseases maintained (Frost Fever + Blood Plague) for all three trees,
+[AoE: Death and Decay, Pestilence, Blood Boil], then:
+- **Blood**: Death Strike → Heart Strike/Blood Strike → Rune Strike / Death Coil
+- **Frost**: Howling Blast (Rime proc) → Obliterate → Blood Strike → Frost Strike
+- **Unholy**: Scourge Strike → Blood Strike → Death Coil
 
-### Chasseur
-Marque du chasseur, Tir automatique et familier engagés automatiquement ; Attaque du raptor si l'ennemi est au contact. Commandement de tuer → Tir de tuerie (<20 %) → [AoE : Volée, Flèches multiples] → Morsure de serpent → tir de spé (**BM** : —, **Précision** : Tir de la chimère puis Visée, **Survie** : Tir explosif puis Flèche noire) → Tir des arcanes → Tir assuré
+### Hunter
+Hunter's Mark, Auto Shot and pet engaged automatically; Raptor Strike when the
+enemy is in melee. Kill Command → Kill Shot (<20%) → [AoE: Volley,
+Multi-Shot] → Serpent Sting → spec shot (**BM**: —, **Marksmanship**: Chimera
+Shot then Aimed Shot, **Survival**: Explosive Shot then Black Arrow) → Arcane
+Shot → Steady Shot
 
-### Voleur
-Estocade entretenue dès 1 point de combo ; [AoE : Eventail de couteaux] ; puis :
-- **Assassinat** : Soif de sang (avec saignement) → Envenimer (4-5 pts) → Mutilation
-- **Combat** : Rupture (4-5 pts) → Eviscération (5 pts) → Attaque sournoise
-- **Finesse** : Rupture (4-5 pts) → Eviscération (5 pts) → Hémorragie
+### Rogue
+Slice and Dice maintained from 1 combo point; [AoE: Fan of Knives]; then:
+- **Assassination**: Hunger for Blood (with a bleed up) → Envenom (4-5 cp) → Mutilate
+- **Combat**: Rupture (4-5 cp) → Eviscerate (5 cp) → Sinister Strike
+- **Subtlety**: Rupture (4-5 cp) → Eviscerate (5 cp) → Hemorrhage
 
-### Prêtre
-- **Ombre** : Forme d'ombre → [AoE : Fouet mental] → Toucher vampirique → Peste dévorante → Mot de l'ombre : Douleur → Attaque mentale → Mot de l'ombre : Mort → Fouet mental
-- **Discipline** : Mot de pouvoir : Bouclier (hors Âme affaiblie) → Pénitence → Prière de guérison → Rénovation → Soins rapides
-- **Sacré** : Cercle de soins / Prière de guérison / Rénovation / Soins rapides / Soins supérieurs selon la gravité
+### Priest
+- **Shadow**: Shadowform → [AoE: Mind Sear] → Vampiric Touch → Devouring Plague → Shadow Word: Pain → Mind Blast → Shadow Word: Death → Mind Flay
+- **Discipline**: Power Word: Shield (no Weakened Soul) → Penance → Prayer of Mending → Renew → Flash Heal
+- **Holy**: Circle of Healing / Prayer of Mending / Renew / Flash Heal / Greater Heal by severity
 
-### Chaman
-- **Elémentaire** : Bouclier d'eau → Horion de flammes → Salve de lave → [AoE : Chaîne d'éclairs] → Eclair
-- **Amélioration** : Bouclier de foudre → Eclair/Chaîne d'éclairs (5 charges d'Arme du Maelström) → Frappe-tempête → Horion de flammes → Horion de terre → Fouet de lave
-- **Restauration** : Bouclier d'eau + Bouclier de terre → Vague déferlante / Vague de soins inférieure / Salve de guérison / Vague de soins selon la gravité
+### Shaman
+- **Elemental**: Water Shield → Flame Shock → Lava Burst → [AoE: Chain Lightning] → Lightning Bolt
+- **Enhancement**: Lightning Shield → Lightning Bolt/Chain Lightning (5 Maelstrom Weapon stacks) → Stormstrike → Flame Shock → Earth Shock → Lava Lash
+- **Restoration**: Water Shield + Earth Shield → Riptide / Lesser Healing Wave / Chain Heal / Healing Wave by severity
 
 ### Mage
-- **Arcanes** : [AoE : Explosion des arcanes, Blizzard] → Missiles des arcanes (proc Barrage ou 4 charges de Déflagration) → Déflagration des arcanes
-- **Feu** : Pyroblast (proc Chaleur continue) → [AoE : Choc de flammes] → Bombe vivante → Boule de feu
-- **Givre** : Elémentaire d'eau → [AoE : Blizzard] → Sarcophage de glace / Javelot de glace (proc Doigts de givre) → Sort de givre et de feu (proc « Boule de feu ! ») → Eclair de givre
+- **Arcane**: [AoE: Arcane Explosion, Blizzard] → Arcane Missiles (Missile Barrage proc or 4 Arcane Blast stacks) → Arcane Blast
+- **Fire**: Pyroblast (Hot Streak proc) → [AoE: Flamestrike] → Living Bomb → Fireball
+- **Frost**: Water Elemental → [AoE: Blizzard] → Deep Freeze / Ice Lance (Fingers of Frost proc) → Frostfire Bolt (Brain Freeze proc) → Frostbolt
 
-### Démoniste
-Connexion automatique si mana < 20 % ; familier engagé ; [AoE : Graine de corruption] ; puis :
-- **Affliction** : Hantise → Corruption → Affliction instable → Malédiction d'agonie → Drain d'âme (<25 %) → Trait de l'ombre
-- **Démonologie** : Malédiction d'apocalypse → Corruption → Immolation → Feu de l'âme (proc Décimation) → Incinérer (proc Cœur de la fournaise) → Trait de l'ombre
-- **Destruction** : Immolation → Conflagration → Trait du chaos → Malédiction d'apocalypse → Incinérer
+### Warlock
+Life Tap when mana < 20%; pet engaged; [AoE: Seed of Corruption]; then:
+- **Affliction**: Haunt → Corruption → Unstable Affliction → Curse of Agony → Drain Soul (<25%) → Shadow Bolt
+- **Demonology**: Curse of Doom → Corruption → Immolate → Soul Fire (Decimation proc) → Incinerate (Molten Core proc) → Shadow Bolt
+- **Destruction**: Immolate → Conflagrate → Chaos Bolt → Curse of Doom → Incinerate
 
-### Druide
-- **Equilibre** : Forme de sélénien → Lucioles → Essaim d'insectes → Feu lunaire → [AoE : Pluie d'étoiles, Ouragan] → Feu stellaire (Eclipse lunaire) / Colère
-- **Farouche** : suit la forme actuelle. **Ours** (tank) : Mutiler → Lucioles (farouche) → Lacérer x5 → [AoE : Balayage] → Mutilation. **Félin** : Fureur du tigre (énergie basse) → Rugissement sauvage → Déchirure (5 pts) → Griffure → Mutiler → Lambeau (repli Mutiler/Griffe)
-- **Restauration** : Récupération / Croissance sauvage / Rétablissement / Prompte guérison / Nourrir selon la gravité
+### Druid
+- **Balance**: Moonkin Form → Faerie Fire → Insect Swarm → Moonfire → [AoE: Starfall, Hurricane] → Starfire (Lunar Eclipse) / Wrath
+- **Feral**: follows your current form. **Bear** (tank): Mangle → Faerie Fire (Feral) → Lacerate x5 → [AoE: Swipe] → Maul. **Cat**: Tiger's Fury (low energy) → Savage Roar → Rip (5 cp) → Rake → Mangle → Shred (fallback Mangle/Claw)
+- **Restoration**: Rejuvenation / Wild Growth / Regrowth / Swiftmend / Nourish by severity
 
 ## Installation
 
-1. Copier le dossier `mod-rotation` dans `modules/` des sources du serveur (à
-   côté de `mod-playerbots`).
-2. Relancer CMake puis recompiler.
-3. (Optionnel) Personnaliser `configs/modules/mod_rotation.conf` ; rechargeable
-   en jeu avec `.reload config`.
+1. Copy the `mod-rotation` folder into the server sources' `modules/`
+   directory (next to `mod-playerbots`).
+2. Re-run CMake, then rebuild.
+3. (Optional) Customize `configs/modules/mod_rotation.conf`; reloadable
+   in-game with `.reload config`.
 
-Aucun SQL n'est nécessaire.
+No SQL required.
 
-## Structure du code
+## Code structure
 
 - [src/Rotation.h](src/Rotation.h) / [src/Rotation.cpp](src/Rotation.cpp) —
-  configuration, interception du sort déclencheur (`OnPlayerSpellCast`, différé
-  d'un tick), helpers (`TryCastRank`, `KeepAuraOn`, rang maximum connu…) et
-  aiguillage classe/spécialisation (`GetMostPointsTalentTree`).
-- `src/Rotation<Classe>.cpp` — un fichier par classe, une fonction par
-  spécialisation : c'est là qu'on ajuste les priorités.
-- `src/mod_rotation_loader.cpp` — point d'entrée du système de modules.
+  configuration, trigger-spell interception (`OnPlayerSpellCast`, deferred by
+  one update tick), helpers (`TryCastRank`, `KeepAuraOn`, highest known
+  rank…) and class/spec dispatch (`GetMostPointsTalentTree`).
+- `src/Rotation<Class>.cpp` — one file per class, one function per
+  specialization: this is where priorities are tuned.
+- `src/mod_rotation_loader.cpp` — module system entry point.
 
-## Limites connues (v2)
+## Known limitations
 
-- Les totems (Chaman), le maintien des buffs longs (Robustesse, Paroles de
-  pouvoir…) et les gros cooldowns offensifs (Récklessness, Métamorphose,
-  Ailes vengeresses…) ne sont pas automatisés — c'est voulu, pour laisser ces
-  décisions au joueur.
-- Lambeau (Voleur : Mutilation ; Druide : Lambeau) échoue silencieusement si
-  le placement (dos de la cible, deux dagues…) n'est pas respecté ; un repli
-  est prévu à chaque fois.
-- Les sorts au sol (Blizzard, Volée, Mort et décomposition…) sont centrés sur
-  la cible.
+- Totems (Shaman), long-duration buffs (Fortitude, Power Word…) and major
+  offensive cooldowns (Recklessness, Metamorphosis, Avenging Wrath…) are not
+  automated — by design, these decisions are left to the player.
+- Positional/tool-dependent abilities (Shred behind the target, Mutilate with
+  two daggers, Envenom with a poison up…) fail silently when their
+  requirement is not met; a fallback is always tried.
+- Ground-targeted spells (Blizzard, Volley, Death and Decay…) are centered on
+  the target.
+
+## License
+
+[GNU AGPL v3](LICENSE) — same license as AzerothCore.
