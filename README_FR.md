@@ -26,10 +26,10 @@ request sur ce dépôt**, afin que les corrections et améliorations profitent �
 tous au lieu de se disperser dans des forks privés.
 
 Note : il s'agit de la politique de contribution du projet, pas d'une clause
-de licence — l'AGPL-3.0 autorise légalement les forks et copies modifiées, à
-condition que le code source modifié soit publié sous la même licence. Si vous
-exploitez une version modifiée, l'AGPL-3.0 vous oblige de toute façon à
-publier vos changements ; la manière conviviale de le faire est une PR ici.
+de licence — la GPL-2.0 autorise légalement les forks et copies modifiées (la
+publication des sources n'est requise qu'en cas de distribution des
+binaires). La pull request est simplement la manière conviviale de partager
+ses améliorations avec la communauté.
 
 ## Le sort déclencheur
 
@@ -134,3 +134,7 @@ Aucun SQL n'est nécessaire.
   est prévu à chaque fois.
 - Les sorts au sol (Blizzard, Volée, Mort et décomposition…) sont centrés sur
   la cible.
+
+## Licence
+
+[GNU GPL v2](LICENSE) — la même licence qu'AzerothCore.

@@ -26,10 +26,9 @@ repository**, so that fixes and improvements benefit everyone instead of
 diverging across private forks.
 
 Note: this is the project's contribution policy, not a license term — the
-AGPL-3.0 license legally permits forks and modified copies, provided the
-modified source is made available under the same license. If you run a
-modified version, you are still required by AGPL-3.0 to publish your changes;
-the friendly way to do that is a PR here.
+GPL-2.0 license legally permits forks and modified copies (source disclosure
+is only required when distributing binaries). A pull request here is simply
+the friendly way to share improvements with the community.
 
 ## The trigger spell
 
@@ -143,4 +142,4 @@ No SQL required.
 
 ## License
 
-[GNU AGPL v3](LICENSE) — same license as AzerothCore.
+[GNU GPL v2](LICENSE) — same license as AzerothCore.
